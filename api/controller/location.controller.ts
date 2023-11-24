@@ -23,8 +23,8 @@ export async function getLocationByIdHandler(req: Request, res: Response) {
 
   try {
     const datas = await locationService.getLocationById(id);
-    res.status(201).json({
-      status: 201,
+    res.status(200).json({
+      status: 200,
       message: "Successfully GET Location by ID",
       data: datas,
     });

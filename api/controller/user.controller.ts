@@ -24,8 +24,8 @@ export async function getUserByIdHandler(req: Request, res: Response) {
 
   try {
     const datas = await userService.getUserById(id);
-    res.status(201).json({
-      status: 201,
+    res.status(200).json({
+      status: 200,
       message: "Successfully GET User by ID",
       data: datas,
     });
