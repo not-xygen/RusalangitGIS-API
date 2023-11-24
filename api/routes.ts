@@ -19,6 +19,8 @@ export async function routes(app: Express) {
     res.send("⚡️ RusalangitGIS API is Running");
   });
 
+  // TODO: Login
+
   // TODO: CRUD User
   app.get("/api/v1/users", getUsersHandler);
   app.get("/api/v1/user/:id", getUsersHandler);

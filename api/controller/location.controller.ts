@@ -1,4 +1,3 @@
-import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import * as locationService from "../service/location.service";
 
@@ -20,10 +19,10 @@ export async function getLocationsHandler(req: Request, res: Response) {
 }
 
 export async function getLocationByIdHandler(req: Request, res: Response) {
-  const { location_id } = req.params;
+  const { id } = req.params;
 
   try {
-    const datas = await locationService.getLocationById(location_id);
+    const datas = await locationService.getLocationById(id);
     res.status(201).json({
       status: 201,
       message: "Successfully GET Location by ID",
@@ -77,18 +76,20 @@ export async function createLocationHandler(req: Request, res: Response) {
 }
 
 export async function updateLocationByIdHandler(req: Request, res: Response) {
-  const { location_id } = req.params;
-  const { user_id, location_name, location_desc, latitude, longitude } =
+  const { id } = req.params;
+  const { location_name, location_desc, latitude, longitude, is_accepted } =
     req.body;
+
+  const location_id = parseInt(id);
 
   try {
     const datas = await locationService.updateLocationById(
       location_id,
-      user_id,
       location_name,
       location_desc,
       latitude,
       longitude,
+      is_accepted,
     );
     res.status(201).json({
       status: 201,
@@ -105,7 +106,9 @@ export async function updateLocationByIdHandler(req: Request, res: Response) {
 }
 
 export async function deleteLocationByIdHandler(req: Request, res: Response) {
-  const { location_id } = req.params;
+  const { id } = req.params;
+
+  const location_id = parseInt(id);
 
   try {
     const datas = await locationService.deleteLocationById(location_id);

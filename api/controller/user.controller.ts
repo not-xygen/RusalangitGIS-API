@@ -20,10 +20,10 @@ export async function getUsersHandler(req: Request, res: Response) {
 }
 
 export async function getUserByIdHandler(req: Request, res: Response) {
-  const { user_id } = req.params;
+  const { id } = req.params;
 
   try {
-    const datas = await userService.getUserById(user_id);
+    const datas = await userService.getUserById(id);
     res.status(201).json({
       status: 201,
       message: "Successfully GET User by ID",
@@ -39,17 +39,17 @@ export async function getUserByIdHandler(req: Request, res: Response) {
 }
 
 export async function createUserHandler(req: Request, res: Response) {
-  const { user_id, user_name, user_desc, latitude, longitude } = req.body;
+  const { username, hashed_password, fullname, role_id } = req.body;
 
   try {
-    if (!user_id || !user_name || !user_desc || !latitude || !longitude) {
+    if (!username || !hashed_password || !fullname || !role_id) {
       return res.status(400).json({
         status: 400,
         message: "Missing required parameters",
       });
     }
 
-    
+    await userService.createUser(username, hashed_password, fullname, role_id);
     res.status(201).json({
       status: 201,
       message: "Successfully POST User",
@@ -65,15 +65,22 @@ export async function createUserHandler(req: Request, res: Response) {
 
 // TODO: Update
 export async function updateUserByIdHandler(req: Request, res: Response) {
-  const { user_id } = req.params;
+  const { id } = req.params;
+  const { username, hashed_password, fullname, role_id } = req.body;
+
+  const user_id = parseInt(id);
 
   try {
-    const connection = await pool.getConnection();
-    const [datas] = await connection.query("CALL GetUserById(?)", [user_id]);
-    connection.release();
+    const datas = await userService.updateUserById(
+      user_id,
+      username,
+      hashed_password,
+      fullname,
+      role_id,
+    );
     res.status(201).json({
       status: 201,
-      message: "Succesfully UPDATE User by ID",
+      message: "Successfully PUT User by ID",
       data: datas,
     });
   } catch (error) {
@@ -87,15 +94,15 @@ export async function updateUserByIdHandler(req: Request, res: Response) {
 
 // TODO: Delete
 export async function deleteUserByIdHandler(req: Request, res: Response) {
-  const { user_id } = req.params;
+  const { id } = req.params;
+
+  const user_id = parseInt(id);
 
   try {
-    const connection = await pool.getConnection();
-    const [datas] = await connection.query("CALL GetUserById(?)", [user_id]);
-    connection.release();
+    const datas = await userService.deleteUserById(user_id);
     res.status(201).json({
       status: 201,
-      message: "Succesfully DELETE User by ID",
+      message: "Successfully DELETE User by ID",
       data: datas,
     });
   } catch (error) {

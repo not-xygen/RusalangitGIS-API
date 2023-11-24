@@ -36,29 +36,32 @@ export async function createLocation(
 }
 
 export async function updateLocationById(
-  location_id: string,
-  user_id: string,
+  location_id: number,
   location_name: string,
   location_desc: string,
   latitude: number,
   longitude: number,
+  is_accepted: number,
 ) {
   const connection = await pool.getConnection();
-  const [datas] = await connection.query("CALL GetLocationById(?)", [
-    location_id,
-    user_id,
-    location_name,
-    location_desc,
-    latitude,
-    longitude,
-  ]);
+  const [datas] = await connection.query(
+    "CALL UpdateLocationByID(?, ?, ?, ?, ?, ?)",
+    [
+      location_id,
+      location_name,
+      location_desc,
+      latitude,
+      longitude,
+      is_accepted,
+    ],
+  );
   connection.release();
   return datas;
 }
 
-export async function deleteLocationById(location_id: string) {
+export async function deleteLocationById(location_id: number) {
   const connection = await pool.getConnection();
-  const [datas] = await connection.query("CALL GetLocationById(?)", [
+  const [datas] = await connection.query("CALL DeleteLocationByID(?)", [
     location_id,
   ]);
   connection.release();

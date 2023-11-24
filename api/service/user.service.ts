@@ -15,46 +15,44 @@ export async function getUserById(user_id: string) {
 }
 
 export async function createUser(
-  user_id: string,
-  user_name: string,
-  user_desc: string,
-  latitude: number,
-  longitude: number,
+  username: string,
+  hashed_password: string,
+  fullname: string,
+  role_id: number,
 ) {
   const connection = await pool.getConnection();
-  const [datas] = await connection.query("CALL CreateUser(?, ?, ?, ?, ?)", [
-    user_id,
-    user_name,
-    user_desc,
-    latitude,
-    longitude,
+  const [datas] = await connection.query("CALL CreateUser(?, ?, ?, ?)", [
+    username,
+    hashed_password,
+    fullname,
+    role_id,
   ]);
   connection.release();
   return datas;
 }
 
 export async function updateUserById(
-  user_id: string,
-  user_name: string,
-  user_desc: string,
-  latitude: number,
-  longitude: number,
+  user_id: number,
+  username: string,
+  hashed_password: string,
+  fullname: string,
+  role_id: number,
 ) {
   const connection = await pool.getConnection();
-  const [datas] = await connection.query("CALL GetUserById(?, ?, ?, ?, ?)", [
+  const [datas] = await connection.query("CALL UpdateUserByID(?, ?, ?, ?, ?)", [
     user_id,
-    user_name,
-    user_desc,
-    latitude,
-    longitude,
+    username,
+    hashed_password,
+    fullname,
+    role_id,
   ]);
   connection.release();
   return datas;
 }
 
-export async function deleteUserById(user_id: string) {
+export async function deleteUserById(user_id: number) {
   const connection = await pool.getConnection();
-  const [datas] = await connection.query("CALL GetUserById(?)", [user_id]);
+  const [datas] = await connection.query("CALL 	DeleteUserByID(?)", [user_id]);
   connection.release();
   return datas;
 }
