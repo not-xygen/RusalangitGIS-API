@@ -3,8 +3,19 @@ import * as userService from "../service/user.service";
 import pool from "../utils/database";
 
 export async function getUsersHandler(req: Request, res: Response) {
+  const { uid } = req.query;
+
   try {
-    const datas = await userService.getAllUsers();
+    let datas;
+
+    if (uid && typeof uid === "string") {
+      // If roleId is provided, filter locations by roleId
+      datas = await userService.getUserByUid(uid);
+    } else {
+      // Otherwise, get all locations
+      datas = await userService.getAllUsers();
+    }
+
     res.status(200).json({
       status: 200,
       message: "Successfully GET Users",
