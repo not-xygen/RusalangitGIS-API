@@ -2,13 +2,19 @@ import { Request, Response } from "express";
 import * as locationService from "../service/location.service";
 
 export async function getLocationsHandler(req: Request, res: Response) {
-  const { isAccepted } = req.query;
+  const { isAccepted, userId } = req.query;
 
   try {
     let datas;
-    if (isAccepted) {
-      datas = await locationService.getAcceptedLocations();
+
+    if (userId && typeof userId === "string") {
+      // If roleId is provided, filter locations by roleId
+      datas = await locationService.getAllLocationsByUserId(userId);
+    } else if (isAccepted) {
+      // If isAccepted is true, get all accepted locations
+      datas = await locationService.getAllAcceptedLocations();
     } else {
+      // Otherwise, get all locations
       datas = await locationService.getAllLocations();
     }
 

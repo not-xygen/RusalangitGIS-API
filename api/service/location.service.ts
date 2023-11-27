@@ -7,10 +7,20 @@ export async function getAllLocations() {
   return datas;
 }
 
-export async function getAcceptedLocations() {
+export async function getAllAcceptedLocations() {
   const connection = await pool.getConnection();
   const [datas] = await connection.query(
     "SELECT * FROM locations WHERE is_accepted = 1",
+  );
+  connection.release();
+  return datas;
+}
+
+export async function getAllLocationsByUserId(userId: string) {
+  const connection = await pool.getConnection();
+  const [datas] = await connection.query(
+    "SELECT * FROM locations WHERE user_id = ?",
+    userId,
   );
   connection.release();
   return datas;

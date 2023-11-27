@@ -7,6 +7,16 @@ export async function getAllUsers() {
   return datas;
 }
 
+export async function getUserByUid(user_id: string) {
+  const connection = await pool.getConnection();
+  const [datas] = await connection.query(
+    "SELECT * FROM users WHERE user_id = ?",
+    [user_id],
+  );
+  connection.release();
+  return datas;
+}
+
 export async function getUserById(user_id: string) {
   const connection = await pool.getConnection();
   const [datas] = await connection.query("CALL GetUserById(?)", [user_id]);
