@@ -10,7 +10,7 @@ export async function getAllUsers() {
 export async function getUserByUid(user_id: string) {
   const connection = await pool.getConnection();
   const [datas] = await connection.query(
-    "SELECT * FROM users WHERE user_id = ?",
+    "SELECT * FROM users WHERE username = ?",
     [user_id],
   );
   connection.release();
