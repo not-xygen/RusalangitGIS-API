@@ -2,11 +2,36 @@ import { Request, Response } from "express";
 import * as locationService from "../service/location.service";
 
 export async function getLocationsHandler(req: Request, res: Response) {
+  const { isAccepted } = req.query;
+
   try {
-    const datas = await locationService.getAllLocations();
+    let datas;
+    if (isAccepted) {
+      datas = await locationService.getAcceptedLocations();
+    } else {
+      datas = await locationService.getAllLocations();
+    }
+
     res.status(200).json({
       status: 200,
       message: "Successfully GET Locations",
+      data: datas,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({
+      status: 400,
+      message: "Failed to fetch data.",
+    });
+  }
+}
+
+export async function getLocationsDetailHandler(req: Request, res: Response) {
+  try {
+    const datas = await locationService.getAllLocationsDetail();
+    res.status(200).json({
+      status: 200,
+      message: "Successfully GET Locations Detail",
       data: datas,
     });
   } catch (error) {
@@ -26,6 +51,28 @@ export async function getLocationByIdHandler(req: Request, res: Response) {
     res.status(200).json({
       status: 200,
       message: "Successfully GET Location by ID",
+      data: datas,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      status: 500,
+      message: "Internal Server Error",
+    });
+  }
+}
+
+export async function getLocationsDetailByUserIdHandler(
+  req: Request,
+  res: Response,
+) {
+  const { id } = req.params;
+
+  try {
+    const datas = await locationService.getAllLocationsDetailByUserID(id);
+    res.status(200).json({
+      status: 200,
+      message: "Successfully GET Location Detail by UserID",
       data: datas,
     });
   } catch (error) {

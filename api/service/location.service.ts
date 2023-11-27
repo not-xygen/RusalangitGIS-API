@@ -7,6 +7,32 @@ export async function getAllLocations() {
   return datas;
 }
 
+export async function getAcceptedLocations() {
+  const connection = await pool.getConnection();
+  const [datas] = await connection.query(
+    "SELECT * FROM locations WHERE is_accepted = 1",
+  );
+  connection.release();
+  return datas;
+}
+
+export async function getAllLocationsDetail() {
+  const connection = await pool.getConnection();
+  const [datas] = await connection.query("CALL GetAllLocationsDetail()");
+  connection.release();
+  return datas;
+}
+
+export async function getAllLocationsDetailByUserID(userId: string) {
+  const connection = await pool.getConnection();
+  const [datas] = await connection.query(
+    "CALL GetAllLocationsDetailByUserId(?)",
+    [userId],
+  );
+  connection.release();
+  return datas;
+}
+
 export async function getLocationById(locationId: string) {
   const connection = await pool.getConnection();
   const [datas] = await connection.query("CALL GetLocationById(?)", [
